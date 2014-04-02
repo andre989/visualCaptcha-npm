@@ -35,7 +35,7 @@ describe( 'visualCaptcha', function() {
         sessionMock = {};
 
         // Start visualCaptcha with that new session
-        visualCaptcha = require( visualCaptchaPath )( sessionMock );
+        visualCaptcha = require( visualCaptchaPath ).init( sessionMock );
     });
 
     // Test setup exceptions
@@ -45,7 +45,7 @@ describe( 'visualCaptcha', function() {
 
         it( 'should throw an exception if no valid session object is sent: null', function() {
             should( function() {
-                visualCaptcha = require( visualCaptchaPath )( null );
+                visualCaptcha = require( visualCaptchaPath ).init( null );
             }).throw({
                 name: validExceptionName,
                 message: validExceptionMessage
@@ -54,7 +54,7 @@ describe( 'visualCaptcha', function() {
 
         it( 'should throw an exception if no valid session object is sent: false', function() {
             should( function() {
-                visualCaptcha = require( visualCaptchaPath )( false );
+                visualCaptcha = require( visualCaptchaPath ).init( false );
             }).throw({
                 name: validExceptionName,
                 message: validExceptionMessage
@@ -63,7 +63,7 @@ describe( 'visualCaptcha', function() {
 
         it( 'should throw an exception if no valid session object is sent: 0', function() {
             should( function() {
-                visualCaptcha = require( visualCaptchaPath )( 0 );
+                visualCaptcha = require( visualCaptchaPath ).init( 0 );
             }).throw({
                 name: validExceptionName,
                 message: validExceptionMessage
@@ -72,7 +72,7 @@ describe( 'visualCaptcha', function() {
 
         it( 'should throw an exception if no valid session object is sent: undefined', function() {
             should( function() {
-                visualCaptcha = require( visualCaptchaPath )( undefined );
+                visualCaptcha = require( visualCaptchaPath ).init( undefined );
             }).throw({
                 name: validExceptionName,
                 message: validExceptionMessage
@@ -88,7 +88,7 @@ describe( 'visualCaptcha', function() {
                 ],
                 obtainedImages;
 
-            visualCaptcha = require( visualCaptchaPath )( sessionMock, false, imageOptions );
+            visualCaptcha = require( visualCaptchaPath ).init( sessionMock, false, imageOptions );
 
             obtainedImages = visualCaptcha.getAllImageOptions();
 
@@ -113,7 +113,7 @@ describe( 'visualCaptcha', function() {
                 ],
                 obtainedAudios;
 
-            visualCaptcha = require( visualCaptchaPath )( sessionMock, false, false, audioOptions );
+            visualCaptcha = require( visualCaptchaPath ).init( sessionMock, false, false, audioOptions );
 
             obtainedAudios = visualCaptcha.getAllAudioOptions();
 
@@ -619,5 +619,24 @@ describe( 'visualCaptcha', function() {
             response.statusCode.should.equal( 404 );
         });
     });
-
+    
+    describe( 'visualCaptcha getter', function () {
+        it( 'should return the same visualCaptcha object of init()', function () {
+            visualCaptcha.should.equal( require( 'visualCaptcha' ).getVisualCaptcha() );
+        });
+        it( 'should throw an error if captcha object is not defined', function () {
+            var validExceptionName = 'visualCaptchaException',
+            validExceptionMessage = 'visualCaptcha is not initialized';
+            try {
+                visualCaptcha.init( null );
+            } catch ( exception ) {
+                should( function () {
+                    visualCaptcha.getVisualCaptcha();
+                }).throw({
+                    name: validExceptionName,
+                    message: validExceptionMessage
+                });
+            }
+        });
+    });
 });

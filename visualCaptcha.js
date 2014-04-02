@@ -3,7 +3,8 @@
 
 var _ = require( 'underscore' ),
     crypto = require( 'crypto' ),
-    visualCaptcha;
+    visualCaptcha,
+    captcha;
 
 visualCaptcha = {
     // Session namespace, used for filtering session data across multiple captchas
@@ -342,10 +343,11 @@ visualCaptcha = {
 };
 
 // @param session is the default session object
+// @param namespace to handle multiple visual captchas
 // @param defaultImages is optional. Defaults to the array inside ./images.json. The path is relative to ./images/
 // @param defaultAudios is optional. Defaults to the array inside ./audios.json. The path is relative to ./audios/
-module.exports = function( session, namespace, defaultImages, defaultAudios ) {
-    var captcha = {};
+exports.init = function( session, namespace, defaultImages, defaultAudios ) {
+    captcha = {};
 
     // Throw an error if no session object is passed
     if ( typeof session !== 'object' || ! session ) {
@@ -387,3 +389,14 @@ module.exports = function( session, namespace, defaultImages, defaultAudios ) {
 
     return captcha;
 };
+
+// getter for the captcha object in order to use it in different modules (like a middleware)
+exports.getVisualCaptcha = function () {
+    if ( typeof captcha === undefined || typeof captcha.session === undefined) {
+        throw {
+            name: 'visualCaptchaException',
+            message: 'visualCaptcha is not initialized'
+        };
+    }
+    return captcha;
+}
