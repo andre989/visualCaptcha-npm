@@ -27,12 +27,19 @@ npm test
 On initialization visualCaptcha function requires `req.session` session object as first argument:
 
 ```
-visualCaptcha = require( 'visualcaptcha' )( req.session, defaultImages, defaultAudios );
+visualCaptcha = require( 'visualcaptcha' ).init( req.session, defaultImages, defaultAudios );
 ```
 Where:
 
 - `defaultImages` is optional parameter. Defaults to the array inside ./images.json. The path is relative to ./images/
 - `defaultAudios` is optional parameter. Defaults to the array inside ./audios.json. The path is relative to ./audios/
+
+### Getting visualCaptcha object
+
+In order to get the last initialized visualCaptcha object:
+```
+visualCaptcha = require( 'visualcaptcha' ).getVisualCaptcha();
+```
 
 ### visualCaptcha properties
 
